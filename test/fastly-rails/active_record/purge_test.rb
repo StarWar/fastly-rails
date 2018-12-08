@@ -4,7 +4,7 @@ describe FastlyRails::ActiveRecord::SurrogateKey do
   let(:api_key)    { 'test' }
   let(:user)       { nil }
   let(:password)   { nil }
-  let(:max_age)    { 100000 }
+  let(:max_age)    { 100_000 }
   let(:service_id) { 'someserviceid' }
   let(:client)     { FastlyRails.client }
 

@@ -4,7 +4,7 @@ describe FastlyRails do
   let(:api_key)       { 'test' }
   let(:user)          { nil }
   let(:password)      { nil }
-  let(:max_age)       { 100000 }
+  let(:max_age)       { 100_000 }
   let(:configuration) { FastlyRails::Configuration.new }
   let(:service_id)    { 'someserviceid' }
   let(:client)        { FastlyRails.client }
@@ -56,8 +56,8 @@ describe FastlyRails do
   end
 
   describe 'purge_by_key' do
-    let(:client) {  MiniTest::Mock.new }
-    let(:key) { "key" }
+    let(:client) { MiniTest::Mock.new }
+    let(:key) { 'key' }
 
     it 'delegates to the client when purging is enabled' do
       FastlyRails.stub(:client, client) do

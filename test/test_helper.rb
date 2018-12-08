@@ -1,12 +1,12 @@
 # Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
+ENV['RAILS_ENV'] = 'test'
 
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
-require "rails/test_help"
-require "minitest/autorun"
+require File.expand_path('dummy/config/environment.rb', __dir__)
+require 'rails/test_help'
+require 'minitest/autorun'
 require 'database_cleaner'
 require 'ffaker'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'webmock/minitest'
 
 begin
@@ -16,7 +16,7 @@ end
 
 Rails.backtrace_cleaner.remove_silencers!
 
-#include factories
+# include factories
 Dir["#{File.dirname(__FILE__)}/dummy/test/factories/*.rb"].each { |f| require f }
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -27,21 +27,21 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 #   ActiveSupport::TestCase.fixtures :all
 # end
 
-ActiveRecord::Migrator.migrate File.expand_path('../dummy/db/migrate/', __FILE__)
+ActiveRecord::Migrator.migrate File.expand_path('dummy/db/migrate', __dir__)
 
 class Minitest::Spec
-  include FactoryGirl::Syntax::Methods
+  include FactoryBot::Syntax::Methods
 
   before :each do
-    stub_request(:any, "https://api.fastly.com/login").
-      to_return(
-        :status   => 200,
-        :body     => "{}"
-    )
-    stub_request(:post, /https:\/\/api.fastly.com\/service\/.*\/purge\/.*/)
-    .to_return(
-      body: "{\"status\":\"ok\"}"
-    )
+    stub_request(:any, 'https://api.fastly.com/login')
+      .to_return(
+        status: 200,
+        body: '{}'
+      )
+    stub_request(:post, %r{https://api.fastly.com/service/.*/purge/.*})
+      .to_return(
+        body: '{"status":"ok"}'
+      )
 
     WebMock.disable_net_connect!
 
@@ -51,24 +51,21 @@ class Minitest::Spec
   after :each do
     DatabaseCleaner.clean
   end
-
 end
 
 class ActionController::TestCase
-  include FactoryGirl::Syntax::Methods
+  include FactoryBot::Syntax::Methods
 end
 
 class ActionDispatch::IntegrationTest
   include WebMock::API
-  include FactoryGirl::Syntax::Methods
+  include FactoryBot::Syntax::Methods
 
   def setup
-    stub_request(:any, /.*/).
-    to_return(
-        :status   => 200,
-        :body     => "{}"
-    )
-
+    stub_request(:any, /.*/)
+      .to_return(
+        status: 200,
+        body: '{}'
+      )
   end
-
 end
